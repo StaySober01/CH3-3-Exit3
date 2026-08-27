@@ -1,0 +1,41 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameModeBase.h"
+#include "Core/Exit3Types.h"
+#include "Exit3GameMode.generated.h"
+
+class AExit3StageManager;
+
+UCLASS()
+class EXIT3_API AExit3GameMode : public AGameModeBase
+{
+	GENERATED_BODY()
+
+public:
+	AExit3GameMode();
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable, Category = "Exit3|Game")
+	void StartNewRun();
+
+	UFUNCTION(BlueprintCallable, Category = "Exit3|Game")
+	void StartRound();
+
+	UFUNCTION(BlueprintCallable, Category = "Exit3|Game")
+	void SubmitDecision(EExit3PlayerDecision Decision);
+
+	UFUNCTION(BlueprintPure, Category = "Exit3|Game")
+	bool IsDecisionLocked() const { return bDecisionLocked; }
+
+private:
+	void AdvanceStage();
+	void ResetToStageOne();
+	class AExit3GameState* GetExit3GameState() const;
+
+	UPROPERTY()
+	TObjectPtr<AExit3StageManager> StageManager;
+
+	bool bDecisionLocked = false;
+};
