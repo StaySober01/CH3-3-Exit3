@@ -3,10 +3,14 @@
 #include "Core/Exit3GameState.h"
 #include "Gameplay/Exit3StageManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/Exit3Character.h"
+#include "Player/Exit3PlayerController.h"
 
 AExit3GameMode::AExit3GameMode()
 {
 	GameStateClass = AExit3GameState::StaticClass();
+	DefaultPawnClass = AExit3Character::StaticClass();
+	PlayerControllerClass = AExit3PlayerController::StaticClass();
 }
 
 void AExit3GameMode::BeginPlay()

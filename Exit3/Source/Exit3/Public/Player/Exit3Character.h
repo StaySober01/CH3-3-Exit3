@@ -6,6 +6,7 @@
 
 class UInputAction;
 class UInputMappingContext;
+class UCameraComponent;
 struct FInputActionValue;
 
 UCLASS()
@@ -16,6 +17,9 @@ class EXIT3_API AExit3Character : public ACharacter
 public:
 	AExit3Character();
 
+	UFUNCTION(BlueprintPure, Category = "Exit3|Camera")
+	UCameraComponent* GetFirstPersonCamera() const { return FirstPersonCamera; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -25,6 +29,9 @@ private:
 	void Look(const FInputActionValue& Value);
 	void StartSprint();
 	void StopSprint();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Exit3|Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> FirstPersonCamera;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Exit3|Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
