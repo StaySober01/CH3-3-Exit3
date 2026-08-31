@@ -24,6 +24,10 @@ protected:
 		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void HandleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
+
 	UPROPERTY(VisibleAnywhere, Category = "Exit3|Trigger")
 	TObjectPtr<UBoxComponent> TriggerVolume;
 

@@ -11,6 +11,7 @@ AExit3ChoiceTrigger::AExit3ChoiceTrigger()
 	SetRootComponent(TriggerVolume);
 	TriggerVolume->SetCollisionProfileName(TEXT("Trigger"));
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &AExit3ChoiceTrigger::HandleBeginOverlap);
+	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &AExit3ChoiceTrigger::HandleEndOverlap);
 }
 
 void AExit3ChoiceTrigger::ResetTrigger()
@@ -31,5 +32,14 @@ void AExit3ChoiceTrigger::HandleBeginOverlap(UPrimitiveComponent* OverlappedComp
 	{
 		bConsumed = true;
 		GameMode->SubmitDecision(Decision);
+	}
+}
+
+void AExit3ChoiceTrigger::HandleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
+{
+	if (OtherActor && OtherActor->IsA<AExit3Character>())
+	{
+		ResetTrigger();
 	}
 }

@@ -7,6 +7,17 @@
 
 class AExit3StageManager;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+	FExit3DecisionResolved,
+	EExit3PlayerDecision, Decision,
+	bool, bCorrect,
+	EExit3Stage, CurrentStage);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FExit3RoundStarted,
+	EExit3Stage, Stage,
+	EExit3RoundState, RoundState);
+
 UCLASS()
 class EXIT3_API AExit3GameMode : public AGameModeBase
 {
@@ -28,6 +39,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Exit3|Game")
 	bool IsDecisionLocked() const { return bDecisionLocked; }
+
+	UPROPERTY(BlueprintAssignable, Category = "Exit3|Game")
+	FExit3DecisionResolved OnDecisionResolved;
+
+	UPROPERTY(BlueprintAssignable, Category = "Exit3|Game")
+	FExit3RoundStarted OnRoundStarted;
 
 private:
 	void AdvanceStage();
