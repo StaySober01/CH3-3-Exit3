@@ -13,6 +13,18 @@ void UExit3HUDWidget::NativeConstruct()
 	}
 }
 
+void UExit3HUDWidget::NativeDestruct()
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (AExit3GameState* State = World->GetGameState<AExit3GameState>())
+		{
+			State->OnStageChanged.RemoveDynamic(this, &UExit3HUDWidget::HandleStageChanged);
+		}
+	}
+	Super::NativeDestruct();
+}
+
 void UExit3HUDWidget::HandleStageChanged(const EExit3Stage NewStage)
 {
 	if (StageText)

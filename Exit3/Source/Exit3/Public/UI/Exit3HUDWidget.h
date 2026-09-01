@@ -14,6 +14,7 @@ class EXIT3_API UExit3HUDWidget : public UUserWidget
 
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
 	UFUNCTION()
 	void HandleStageChanged(EExit3Stage NewStage);
