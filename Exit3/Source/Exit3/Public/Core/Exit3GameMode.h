@@ -6,6 +6,7 @@
 #include "Exit3GameMode.generated.h"
 
 class AExit3StageManager;
+class AExit3LevelStreamManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
 	FExit3DecisionResolved,
@@ -47,12 +48,18 @@ public:
 	FExit3RoundStarted OnRoundStarted;
 
 private:
+	UFUNCTION()
+	void FinishRoundPreparation();
+
 	void AdvanceStage();
 	void ResetToStageOne();
 	class AExit3GameState* GetExit3GameState() const;
 
 	UPROPERTY()
 	TObjectPtr<AExit3StageManager> StageManager;
+
+	UPROPERTY()
+	TObjectPtr<AExit3LevelStreamManager> LevelStreamManager;
 
 	bool bDecisionLocked = false;
 };
