@@ -57,7 +57,7 @@ void AExit3LevelStreamManager::RecreateGameplayLevelForEntry(const EExit3Passage
 
 	if (StreamingLevelInstance)
 	{
-		StreamingLevelInstance->OnLevelLoaded.RemoveDynamic(this, &AExit3LevelStreamManager::HandleGameplayLevelLoaded);
+		StreamingLevelInstance->OnLevelShown.RemoveDynamic(this, &AExit3LevelStreamManager::HandleGameplayLevelShown);
 		StreamingLevelInstance->SetShouldBeVisible(false);
 		StreamingLevelInstance->SetShouldBeLoaded(false);
 		StreamingLevelInstance->SetIsRequestingUnloadAndRemoval(true);
@@ -85,7 +85,7 @@ void AExit3LevelStreamManager::RecreateGameplayLevelForEntry(const EExit3Passage
 
 	if (bLoadSucceeded && StreamingLevelInstance)
 	{
-		StreamingLevelInstance->OnLevelLoaded.AddDynamic(this, &AExit3LevelStreamManager::HandleGameplayLevelLoaded);
+		StreamingLevelInstance->OnLevelShown.AddDynamic(this, &AExit3LevelStreamManager::HandleGameplayLevelShown);
 		UE_LOG(LogTemp, Log, TEXT("Gameplay level load requested: %s, EntrySide=%s, Location=%s, Rotation=%s"),
 			*GameplayLevel.ToSoftObjectPath().ToString(),
 			ActiveEntrySide == EExit3PassageSide::SideA ? TEXT("A") : TEXT("B"),
@@ -98,11 +98,11 @@ void AExit3LevelStreamManager::RecreateGameplayLevelForEntry(const EExit3Passage
 	}
 }
 
-void AExit3LevelStreamManager::HandleGameplayLevelLoaded()
+void AExit3LevelStreamManager::HandleGameplayLevelShown()
 {
 	if (StreamingLevelInstance)
 	{
-		StreamingLevelInstance->OnLevelLoaded.RemoveDynamic(this, &AExit3LevelStreamManager::HandleGameplayLevelLoaded);
+		StreamingLevelInstance->OnLevelShown.RemoveDynamic(this, &AExit3LevelStreamManager::HandleGameplayLevelShown);
 	}
 	bGameplayLevelReady = true;
 	EntranceBlocker->SetCollisionEnabled(ECollisionEnabled::NoCollision);

@@ -13,27 +13,49 @@ class EXIT3_API AExit3AnomalyActor : public AActor
 public:
 	AExit3AnomalyActor();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Exit3|Anomaly")
-	void ApplyAnomaly();
-	virtual void ApplyAnomaly_Implementation();
+	UFUNCTION(BlueprintCallable, Category = "Exit3|Anomaly")
+	bool ActivateAnomaly();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Exit3|Anomaly")
-	void ResetAnomaly();
-	virtual void ResetAnomaly_Implementation();
+	UFUNCTION(BlueprintCallable, Category = "Exit3|Anomaly")
+	void RestoreAnomaly();
+
+	UFUNCTION(BlueprintPure, Category = "Exit3|Anomaly")
+	FName GetAnomalyId() const { return AnomalyId; }
 
 	UFUNCTION(BlueprintPure, Category = "Exit3|Anomaly")
 	EExit3Stage GetSupportedStage() const { return SupportedStage; }
 
 	UFUNCTION(BlueprintPure, Category = "Exit3|Anomaly")
+	bool IsEnabled() const { return bEnabled; }
+
+	UFUNCTION(BlueprintPure, Category = "Exit3|Anomaly")
 	bool IsApplied() const { return bApplied; }
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Exit3|Anomaly")
+	UFUNCTION(BlueprintNativeEvent, Category = "Exit3|Anomaly")
+	void CaptureNormalState();
+	virtual void CaptureNormalState_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Exit3|Anomaly")
+	void ApplyAnomalyEffect();
+	virtual void ApplyAnomalyEffect_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Exit3|Anomaly")
+	void RestoreNormalState();
+	virtual void RestoreNormalState_Implementation();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Exit3|Anomaly")
 	FName AnomalyId = NAME_None;
 
-	UPROPERTY(EditAnywhere, Category = "Exit3|Anomaly")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Exit3|Anomaly")
 	EExit3Stage SupportedStage = EExit3Stage::Stage1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Exit3|Anomaly")
+	bool bEnabled = true;
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Exit3|Anomaly")
 	bool bApplied = false;
+
+private:
+	bool bNormalStateCaptured = false;
 };

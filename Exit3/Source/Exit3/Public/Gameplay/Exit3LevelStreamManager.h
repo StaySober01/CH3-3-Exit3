@@ -43,7 +43,7 @@ public:
 
 protected:
 	UFUNCTION()
-	void HandleGameplayLevelLoaded();
+	void HandleGameplayLevelShown();
 
 	UPROPERTY(EditAnywhere, Category = "Exit3|Streaming")
 	TSoftObjectPtr<UWorld> GameplayLevel;
