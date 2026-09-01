@@ -6,6 +6,7 @@
 #include "Exit3ChoiceTrigger.generated.h"
 
 class UBoxComponent;
+class UArrowComponent;
 
 UCLASS()
 class EXIT3_API AExit3ChoiceTrigger : public AActor
@@ -31,8 +32,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Exit3|Trigger")
 	TObjectPtr<UBoxComponent> TriggerVolume;
 
+	UPROPERTY(VisibleAnywhere, Category = "Exit3|Trigger")
+	TObjectPtr<UArrowComponent> ExitDirection;
+
 	UPROPERTY(EditAnywhere, Category = "Exit3|Trigger")
-	EExit3PlayerDecision Decision = EExit3PlayerDecision::Normal;
+	EExit3PassageSide ExitSide = EExit3PassageSide::SideA;
+
+	UPROPERTY(EditAnywhere, Category = "Exit3|Trigger")
+	bool bRequireExitDirection = true;
+
+	UPROPERTY(EditAnywhere, Category = "Exit3|Trigger", meta = (ClampMin = "-1.0", ClampMax = "1.0", EditCondition = "bRequireExitDirection"))
+	float MinimumExitDirectionDot = 0.25f;
 
 private:
 	bool bConsumed = false;

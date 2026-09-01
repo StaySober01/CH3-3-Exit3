@@ -40,6 +40,7 @@ void AExit3GameMode::BeginPlay()
 
 void AExit3GameMode::StartNewRun()
 {
+	CurrentRoundEntrySide = InitialEntrySide;
 	if (AExit3GameState* State = GetExit3GameState())
 	{
 		State->SetGameCleared(false);
@@ -71,7 +72,7 @@ void AExit3GameMode::StartRound()
 		UE_LOG(LogTemp, Log, TEXT("Round preparation started: Stage=%d, State=%s"),
 			static_cast<uint8>(State->GetCurrentStage()),
 			State->GetRoundState() == EExit3RoundState::Anomaly ? TEXT("Anomaly") : TEXT("Normal"));
-		LevelStreamManager->RecreateGameplayLevel();
+		LevelStreamManager->RecreateGameplayLevelForEntry(CurrentRoundEntrySide);
 		return;
 	}
 
@@ -80,6 +81,28 @@ void AExit3GameMode::StartRound()
 		UE_LOG(LogTemp, Warning, TEXT("Level streaming is bypassed because GameplayLevel is not configured."));
 	}
 	FinishRoundPreparation();
+}
+
+void AExit3GameMode::SubmitExitSide(const EExit3PassageSide ExitSide)
+{
+	if (bDecisionLocked)
+	{
+		UE_LOG(LogTemp, Verbose, TEXT("Passage exit ignored because the current round is locked."));
+		return;
+	}
+
+	const EExit3PassageSide EntrySide = CurrentRoundEntrySide;
+	const EExit3PlayerDecision Decision = ExitSide == EntrySide
+		? EExit3PlayerDecision::Anomaly
+		: EExit3PlayerDecision::Normal;
+
+	UE_LOG(LogTemp, Log, TEXT("Passage exit submitted: EntrySide=%s, ExitSide=%s, Decision=%s"),
+		EntrySide == EExit3PassageSide::SideA ? TEXT("A") : TEXT("B"),
+		ExitSide == EExit3PassageSide::SideA ? TEXT("A") : TEXT("B"),
+		Decision == EExit3PlayerDecision::Anomaly ? TEXT("Anomaly") : TEXT("Normal"));
+
+	CurrentRoundEntrySide = GetOppositeSide(ExitSide);
+	SubmitDecision(Decision);
 }
 
 void AExit3GameMode::FinishRoundPreparation()
@@ -184,4 +207,9 @@ void AExit3GameMode::ResetToStageOne()
 AExit3GameState* AExit3GameMode::GetExit3GameState() const
 {
 	return GetGameState<AExit3GameState>();
+}
+
+EExit3PassageSide AExit3GameMode::GetOppositeSide(const EExit3PassageSide Side)
+{
+	return Side == EExit3PassageSide::SideA ? EExit3PassageSide::SideB : EExit3PassageSide::SideA;
 }

@@ -25,3 +25,10 @@ enum class EExit3PlayerDecision : uint8
 	Normal,
 	Anomaly
 };
+
+UENUM(BlueprintType)
+enum class EExit3PassageSide : uint8
+{
+	SideA UMETA(DisplayName = "Side A"),
+	SideB UMETA(DisplayName = "Side B")
+};

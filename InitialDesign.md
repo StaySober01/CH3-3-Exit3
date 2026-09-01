@@ -355,3 +355,18 @@ Game Clear
 각 판정 후:
 연결 통로 → 기존 게임 진행 맵 삭제 → 새 게임 진행 맵 생성
 ```
+
+---
+
+## 13. S자 연결 통로 전환 구조 확정 (2026-09-01)
+
+Persistent Level에는 열린 S자 연결 통로를 유지하고, 1자형 Gameplay Level은 연결 통로의 Side A 또는 Side B에 번갈아 생성한다. Gameplay Level 끝에는 연결 통로와 동일하게 보이는 짧은 복제 코너를 두고, 시야가 가려진 지점에서 반대편 S자 통로 내부로 플레이어를 이동시킨다.
+
+- 최초 Gameplay Level은 Side A에 생성한다.
+- 이번 라운드 입구와 같은 쪽으로 돌아오면 `Anomaly` 선택으로 판정한다.
+- Gameplay Level 끝까지 통과하면 반대편 S자 통로 내부로 이동하고 `Normal` 선택으로 판정한다.
+- 판정 후 플레이어가 S자 통로를 빠져나올 반대편을 다음 라운드 입구로 사용한다.
+- A/B 반환 Trigger는 고정 Normal/Anomaly 대신 통과한 Side를 전달하며, 관찰 공간에서 S자 통로로 나오는 방향만 판정한다.
+- 정상 진행 전환은 Source 기준 플레이어의 상대 위치, 회전, 시선 및 속도를 Destination에 보존한다.
+- Gameplay Level 로딩 중에는 A/B 양쪽 접합부를 모두 차단한다.
+- Side A와 Side B는 각각 전용 Gameplay Level Transform을 항상 사용한다.

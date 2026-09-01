@@ -38,8 +38,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Exit3|Game")
 	void SubmitDecision(EExit3PlayerDecision Decision);
 
+	UFUNCTION(BlueprintCallable, Category = "Exit3|Game")
+	void SubmitExitSide(EExit3PassageSide ExitSide);
+
 	UFUNCTION(BlueprintPure, Category = "Exit3|Game")
 	bool IsDecisionLocked() const { return bDecisionLocked; }
+
+	UFUNCTION(BlueprintPure, Category = "Exit3|Game")
+	EExit3PassageSide GetCurrentRoundEntrySide() const { return CurrentRoundEntrySide; }
 
 	UPROPERTY(BlueprintAssignable, Category = "Exit3|Game")
 	FExit3DecisionResolved OnDecisionResolved;
@@ -53,6 +59,7 @@ private:
 
 	void AdvanceStage();
 	void ResetToStageOne();
+	static EExit3PassageSide GetOppositeSide(EExit3PassageSide Side);
 	class AExit3GameState* GetExit3GameState() const;
 
 	UPROPERTY()
@@ -60,6 +67,11 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<AExit3LevelStreamManager> LevelStreamManager;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Exit3|Passage")
+	EExit3PassageSide InitialEntrySide = EExit3PassageSide::SideA;
+
+	EExit3PassageSide CurrentRoundEntrySide = EExit3PassageSide::SideA;
 
 	bool bDecisionLocked = false;
 };
